@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Question Paper</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .choice-group {
+            margin-bottom: 10px;
+        }
+
+        .btn-add-question,
+        .btn-submit {
+            margin-top: 20px;
+            padding: 7px 14px;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: auto;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+            width: auto;
+            font-size: 16px;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Create Questions</h1>
+        <form id="questionPaperForm">
+            <div class="form-group">
+                <label for="paper-title">Title:</label>
+                <input type="text" class="form-control" id="paper-title" name="paper-title" required>
+            </div>
+            <div id="questionFields">
+                <div class="form-group">
+                    <label for="question1">Question 1:</label>
+                    <textarea class="form-control" id="question1" name="question1" rows="3" required></textarea>
+                    <div class="choice-group">
+                        <label for="question1-choice">Options:</label>
+                        <input type="text" class="form-control" id="question1-choice1" name="question1-choice1" placeholder="A" required>
+                        <input type="text" class="form-control" id="question1-choice2" name="question1-choice2" placeholder="B" required>
+                        <input type="text" class="form-control" id="question1-choice3" name="question1-choice3" placeholder="C" required>
+                        <input type="text" class="form-control" id="question1-choice4" name="question1-choice4" placeholder="D" required>
+                    </div>
+                    <div class="choice-group">
+                        <label for="question1-correct-choice">Correct Answer:</label>
+                        <select class="form-control" id="question1-correct-choice" name="question1-correct-choice" required>
+                            <option value="">Select Correct Answer</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button type="button" class="btn btn-primary btn-add-question" onclick="addQuestion()">Add Question</button>
+                <button type="submit" class="btn btn-success btn-submit">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        var questionCounter = 1;
+
+        function addQuestion() {
+            questionCounter++;
+            var questionDiv = document.createElement("div");
+            questionDiv.classList.add("form-group");
+            questionDiv.innerHTML = `
+                <label for="question${questionCounter}">Question ${questionCounter}:</label>
+                <textarea class="form-control" id="question${questionCounter}" name="question${questionCounter}" rows="3" required></textarea>
+                <div class="choice-group">
+                    <label for="question${questionCounter}-choice">Options:</label>
+                    <input type="text" class="form-control" id="question${questionCounter}-choice1" name="question${questionCounter}-choice1" placeholder="A" required>
+                    <input type="text" class="form-control" id="question${questionCounter}-choice2" name="question${questionCounter}-choice2" placeholder="B" required>
+                    <input type="text" class="form-control" id="question${questionCounter}-choice3" name="question${questionCounter}-choice3" placeholder="C" required>
+                    <input type="text" class="form-control" id="question${questionCounter}-choice4" name="question${questionCounter}-choice4" placeholder="D" required>
+                </div>
+                <div class="choice-group">
+                    <label for="question${questionCounter}-correct-choice">Correct Answer:</label>
+                    <select class="form-control" id="question${questionCounter}-correct-choice" name="question${questionCounter}-correct-choice" required>
+                        <option value="">Select Correct Answer</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+            `;
+            document.getElementById("questionFields").appendChild(questionDiv);
+        }
+    </script>
+</body>
+
+</html>

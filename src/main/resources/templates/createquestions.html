@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Question</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #343a40 !important;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .navbar-brand:hover {
+            color: #17a2b8;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #17a2b8 !important;
+        }
+
+        .nav-item.active .nav-link {
+            background-color: #17a2b8 !important;
+            border-radius: 20px;
+        }
+
+        .nav-item.active .nav-link:hover {
+            background-color: #138496 !important;
+        }
+
+        .nav-item:last-child .nav-link {
+            border-radius: 20px;
+            padding: 8px 20px;
+        }
+
+        .nav-item:last-child .nav-link:hover {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+
+        .container-fluid {
+            padding-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .btn-action {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/questions">Questions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/analytics">Analytics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/settings">Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-danger" href="/admin/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<form method="post" action="/admin/addquestion">
+    <!-- Add a hidden input field for the question ID -->
+    <input type="hidden" id="questionId" name="id" value="123"> <!-- Replace "123" with the actual question ID if available -->
+
+    <div class="form-group">
+        <label for="difficulty">Difficulty:</label>
+        <select class="form-control" id="difficulty" name="difficulty">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+            <!-- Add more options for other difficulty levels -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="language">Language:</label>
+        <select class="form-control" id="language" name="language">
+            <option value="HTML">HTML</option>
+            <!-- Add more options for other languages -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="answerType">Answer Type:</label>
+        <select class="form-control" id="answerType" name="answerType">
+            <option value="single">Single Correct Answer</option>
+            <option value="multiple">Multiple Correct Answers</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="question">Question:</label>
+        <input type="text" class="form-control" id="question" name="question">
+    </div>
+    <div class="form-group">
+        <label for="options">Options:</label>
+        <input type="text" class="form-control" id="optionA" name="optionA" placeholder="Option A">
+        <input type="text" class="form-control" id="optionB" name="optionB" placeholder="Option B">
+        <input type="text" class="form-control" id="optionC" name="optionC" placeholder="Option C">
+        <input type="text" class="form-control" id="optionD" name="optionD" placeholder="Option D">
+    </div>
+    <div class="form-group" id="correctAnswersContainer">
+        <label for="correctAnswer">Correct Answer(s):</label>
+        <select class="form-control correct-answer-dropdown" name="correctAnswer" multiple>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+        </select>
+    </div>
+    <!-- Add correct answer button -->
+    <button type="button" class="btn btn-primary" id="addCorrectAnswerBtn" onclick="addCorrectAnswer()" disabled>Add Another Correct Answer</button>
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom Script -->
+    <script>
+        var answerCount = 1;
+
+        document.getElementById("answerType").addEventListener("change", function () {
+            var answerType = this.value;
+            var addCorrectAnswerBtn = document.getElementById("addCorrectAnswerBtn");
+            if (answerType === "multiple") {
+                addCorrectAnswerBtn.disabled = false;
+            } else {
+                addCorrectAnswerBtn.disabled = true;
+            }
+        });
+
+        function addCorrectAnswer() {
+            if (answerCount < 4) {
+                answerCount++;
+                var newCorrectAnswerSelect = document.createElement("select");
+                newCorrectAnswerSelect.classList.add("form-control", "correct-answer-dropdown");
+                newCorrectAnswerSelect.name = "correctAnswer" + answerCount;
+                newCorrectAnswerSelect.size = "1";
+                var options = ["A", "B", "C", "D"];
+                for (var i = 0; i < options.length; i++) {
+                    if (!document.querySelector(".correct-answer-dropdown option[value='" + options[i] + "']:checked")) {
+                        var option = document.createElement("option");
+                        option.value = options[i];
+                        option.text = options[i];
+                        newCorrectAnswerSelect.appendChild(option);
+                    }
+                }
+                document.getElementById("correctAnswersContainer").appendChild(newCorrectAnswerSelect);
+                if (answerCount === 4) {
+                    document.getElementById("addCorrectAnswerBtn").disabled = true;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

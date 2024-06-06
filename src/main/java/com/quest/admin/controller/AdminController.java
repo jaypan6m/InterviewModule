@@ -1,5 +1,6 @@
 package com.quest.admin.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.quest.admin.dto.QuestionDTO;
 import com.quest.admin.entity.Question;
 import com.quest.admin.service.QuestionService;
 
@@ -22,7 +24,7 @@ public class AdminController {
     private static final String PASSWORD = "admin";
     
     private final QuestionService questionService;
-
+    
     @Autowired
     public AdminController(QuestionService questionService) {
         this.questionService = questionService;
@@ -85,18 +87,40 @@ public class AdminController {
     	return "createquestions";
     }
     
-    @PostMapping("/addquestion") 
-    public String addQuestion(@ModelAttribute("question") Question question,
-                              @RequestParam("correctAnswer") List<String> correctAnswers,
+    @PostMapping("/addquestion")
+    public String addQuestion(@ModelAttribute("question") QuestionDTO questionDTO,
                               BindingResult result,
-                              RedirectAttributes redirectAttributes){
-        System.out.println("In add questions");
+                              RedirectAttributes redirectAttributes) {
+    	System.out.println("In addquestion");
+        // Check for validation errors
         if (result.hasErrors()) {
             return "createquestions"; // Return to the form if there are errors
         }
 
-        // Set the correct answers to the Question object
-        question.setCorrectAnswers(correctAnswers);
+        // Create a new Question entity
+        Question question = new Question();
+
+        // Set the attributes of the Question entity from the DTO
+        question.setDifficulty(questionDTO.getDifficulty());
+        question.setLanguage(questionDTO.getLanguage());
+        question.setAnswerType(questionDTO.getAnswerType());
+        question.setQuestion(questionDTO.getQuestion());
+
+        // Set options and correct answers if required
+        // For demonstration purposes, assuming you have optionA, optionB, optionC, optionD in your DTO
+        System.out.println(questionDTO.getOptionA());
+        System.out.println(questionDTO.getOptionB());
+        System.out.println(questionDTO.getOptionC());
+        System.out.println(questionDTO.getOptionD()) ;
+        
+        question.setOptionA(questionDTO.getOptionA());
+        question.setOptionB(questionDTO.getOptionB());
+        question.setOptionC(questionDTO.getOptionC());
+        question.setOptionD(questionDTO.getOptionD());
+        System.out.println(questionDTO.getCorrectAnswers());
+       question.setCorrectAnswers(questionDTO.getCorrectAnswers());
+        // Set correct answers if required
+        // Make sure to adapt this based on your actual logic and data model
 
         // Save the question
         questionService.saveQuestion(question);
@@ -104,7 +128,9 @@ public class AdminController {
         // Add success message
         redirectAttributes.addFlashAttribute("message", "Question added successfully!");
 
-        // Redirect to the create page
-        return "redirect:/admin/questions/create";
+        // Redirect to the createquestions page
+        return "redirect:/admin/createquestions";
     }
+
+
 }

@@ -14,36 +14,20 @@ import jakarta.persistence.Table;
 public class Question {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
-    @Column(nullable = false)
+
     private String difficulty;
-
-    @Column(nullable = false)
     private String language;
-
-    @Column(nullable = false)
     private String answerType;
-
-    @Column(nullable = false)
     private String question;
-
-    @Column(nullable = false)
     private String optionA;
-
-    @Column(nullable = false)
     private String optionB;
-
-    @Column(nullable = false)
     private String optionC;
-
-    @Column(nullable = false)
     private String optionD;
-
-    @Column(nullable = false)
     private List<String> correctAnswers;
     
-	public Question(String id, String difficulty, String language, String answerType, String question, String optionA,
+	public Question(Long id, String difficulty, String language, String answerType, String question, String optionA,
 			String optionB, String optionC, String optionD, List<String> correctAnswers) {
 		super();
 		this.id = id;
@@ -63,11 +47,11 @@ public class Question {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

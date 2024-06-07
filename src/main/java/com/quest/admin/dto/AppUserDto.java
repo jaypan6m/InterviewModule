@@ -2,16 +2,17 @@ package com.quest.admin.dto;
 
 public class AppUserDto {
 
-	private String username;
-	
+	private String id;
+	private String userName;
+
 	private String password;
 
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String username) {
+		this.userName = username;
 	}
 
 	public String getPassword() {
@@ -21,5 +22,13 @@ public class AppUserDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }

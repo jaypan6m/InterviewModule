@@ -1,0 +1,48 @@
+body {
+    font-size: 14px;
+}
+
+/* table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+    bottom: .5em;
+} */
+
+input {
+    font-size: 13px;
+}
+
+.form-control {
+    font-size: 13px;
+}
+
+.mainDiv {
+    height: 25px;
+    color: red;
+    font-size: 12px;
+    background-color: #fcf8e3;
+    padding: 5px;
+    margin-bottom: 5px;
+    visibility: hidden;
+}
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+.navbar-nav li:hover > ul.dropdown-menu {
+    display: block;
+}

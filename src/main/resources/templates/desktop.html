@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            appUser.userId = "[[${user.id}]]";
+            appUser.userName = "[[${user.userName}]]";
+            appUser.email = "[[${user.password}]]";
+            $("#imNav").load("/dashboard");
+        });
+    </script>
+</head>
+ 
+<body>
+    <div id="imNav"></div>
+    <div id="imData"></div>
+    <div id="modal"></div>
+</body>
+ 
+</html>

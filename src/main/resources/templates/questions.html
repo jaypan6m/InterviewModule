@@ -8,62 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
-   <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar {
-            background-color: #343a40 !important;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 0.5rem 1rem;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .navbar-brand:hover {
-            color: #17a2b8;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #17a2b8 !important;
-        }
-
-        .nav-item.active .nav-link {
-            background-color: #17a2b8 !important;
-            border-radius: 20px;
-        }
-
-        .nav-item.active .nav-link:hover {
-            background-color: #138496 !important;
-        }
-
-        .nav-item:last-child .nav-link {
-            border-radius: 20px;
-            padding: 8px 20px;
-        }
-
-        .nav-item:last-child .nav-link:hover {
-            background-color: #dc3545 !important;
-            border-color: #dc3545 !important;
-        }
-
-        .container-fluid {
-            padding-top: 20px;
-        }
+    <style>
         .table th,
         .table td {
             vertical-align: middle;
@@ -72,41 +17,108 @@
         .btn-action {
             margin-right: 5px;
         }
+
+        .filters-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .filter-select {
+            /* Removed margin-left and margin-right */
+        }
+
+        #languageSelect,
+        #difficultySelect {
+            width: 200px;
+            margin-left: 10px;
+        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load navbar.html into the #navbarContainer div
+            $('#navbarContainer').load('/api/navigation');
+
+            // Initial load of questions
+            loadQuestions();
+
+            // Event listener for dropdown change
+            $("#languageSelect, #difficultySelect").change(function () {
+                filterQuestions();
+            });
+        });
+
+        // Function to fetch questions from the server and populate the table
+        function loadQuestions() {
+            $.get("/api/questions")
+                .done(function (data) {
+                    // Update the question table with the fetched HTML content
+                    $("#questionTable tbody").html(data);
+                })
+                .fail(function (xhr, status, error) {
+                    // Handle AJAX errors here
+                    console.error("Error fetching questions:", error);
+                });
+        }
+
+        // Function to fetch filtered questions based on language and difficulty
+        function filterQuestions() {
+            var language = $("#languageSelect").val();
+            var difficulty = $("#difficultySelect").val();
+            // Fetch filtered questions from the server using AJAX
+            $.get("/api/questions", { language: language, difficulty: difficulty })
+                .done(function (data) {
+                    // Update the question table with the filtered results
+                    $("#questionTable tbody").html(data);
+                })
+                .fail(function (xhr, status, error) {
+                    // Handle AJAX errors here
+                    console.error("Error fetching questions:", error);
+                });
+        }
+
+        function editQuestion(id) {
+            console.log("ID value:", id); // Log the ID value
+            var questionId = parseInt(id);
+            console.log("Parsed question ID:", questionId); // Log the parsed question ID
+            window.location.href = "/api/questions/edit/" + questionId;
+        }
+    </script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Admin Dashboard</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/questions">Questions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/analytics">Analytics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/settings">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-danger" href="/admin/logout">Logout</a>
-                    </li>
-                </ul>
+    <div id="navbarContainer"></div>
+    <div class="container">
+        <h2 class="mt-4 mb-4">Question Bank</h2>
+        <div class="row align-items-center justify-content-between">
+            <div class="col-md-auto">
+                <a href="/api/createquestions" class="btn btn-primary">Add Question</a>
+            </div>
+            <div class="col-md-auto form-group filter-select">
+                <label for="languageSelect">Language:</label>
+                <select id="languageSelect" class="form-control">
+                    <option value="">All Languages</option>
+                    <!-- Add options for each available language -->
+                    <option value="HTML">HTML</option>
+                    <option value="CSS">CSS</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <!-- Add more languages as needed -->
+                </select>
+            </div>
+            <div class="col-md-auto form-group filter-select">
+                <label for="difficultySelect">Difficulty:</label>
+                <select id="difficultySelect" class="form-control">
+                    <option value="">All Difficulties</option>
+                    <!-- Add options for each available difficulty -->
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                    <!-- Add more difficulties as needed -->
+                </select>
             </div>
         </div>
-    </nav>
-     <div class="container">
-        <h2 class="mt-4 mb-4">Question Bank</h2>
-        <a href="/admin/createquestions" class="btn btn-primary">Add Question</a>
         <br>
         <br>
         <table class="table">
@@ -119,18 +131,8 @@
                     <th>Difficulty</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>What is HTML?</td>
-                    <td>HTML</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-primary btn-action">Edit</button>
-                        <button type="button" class="btn btn-sm btn-danger btn-action">Delete</button>
-                    </td>
-                    <td>Easy</td>
-                </tr>
-                <!-- Add more rows as needed -->
+            <tbody id="questionTable">
+                <!-- Questions will be dynamically inserted here -->
             </tbody>
         </table>
     </div>

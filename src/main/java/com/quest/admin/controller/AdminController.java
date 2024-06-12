@@ -1,15 +1,21 @@
 package com.quest.admin.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.quest.admin.dto.AppUserDto;
 import com.quest.admin.dto.QuestionDTO;
 import com.quest.admin.entity.Question;
 import com.quest.admin.service.QuestionService;
@@ -17,7 +23,7 @@ import com.quest.admin.service.QuestionService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/api")
 public class AdminController {
 
     private static final String USERNAME = "admin";
@@ -29,24 +35,32 @@ public class AdminController {
     public AdminController(QuestionService questionService) {
         this.questionService = questionService;
     }
-    
+   
+    @GetMapping("/")
+    public String loadIndexPage() {
+        return  "index";
+    }
 
-    @GetMapping("/home")
+    @GetMapping("/login")
     public String showLoginPage() {
         return  "login";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password, HttpSession session, Model model) {
-        	if (USERNAME.equals(username) && PASSWORD.equals(password)) {
-            session.setAttribute("loggedIn", true);
-            return "redirect:dashboard"; // Redirect to dashboard after successful login
+    @PostMapping("/validate")
+    public String login(@RequestBody AppUserDto appUserDto, Model model, HttpSession session) {
+        	if (USERNAME.equals(appUserDto.getUserName()) && PASSWORD.equals(appUserDto.getPassword())) {
+        	session.setAttribute("loggedIn", true);
+            model.addAttribute("user", appUserDto);
+            //model.addAttribute("user",
+			//		userService.getUserByEmailAndPassword(appUserDto.getUsername(), appUserDto.getPassword()));
+            return "desktop"; // Redirect to dashboard after successful login
         } else {
             model.addAttribute("error", "Invalid credentials");
             return "login"; // Return login.html with error message
         }
     }
 
+    
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session) {
         if (session.getAttribute("loggedIn") == null || !(boolean) session.getAttribute("loggedIn")) {
@@ -58,18 +72,31 @@ public class AdminController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate(); // Invalidate session
-        return "redirect:home"; // Redirect to login page after logout
+        return "redirect:/ "; // Redirect to login page after logout
+        
     }
     
     @GetMapping("/users")
     public String manageUsers() {
-    	System.out.println("In users");
         return "users"; // Assuming you have a users.html template
     }
 
     @GetMapping("/questions")
-    public String manageQuestions() {
+    public String manageQuestions(Model model) {
+    	List<Question> questions = questionService.getAllQuestions();
+    	model.addAttribute("questions", questions);
+    	System.out.println(questions);
         return "questions"; // Assuming you have a questions.html template
+    }
+    
+    @GetMapping("/questions/edit/{id}")
+    public String editQuestion(@PathVariable Long id, Model model) {
+    	System.out.println("In edit");
+        // Here you can retrieve the question with the given ID from the database
+        // You can then pass the question object to the view for editing
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question);
+        return "edit_question"; // Assuming you have an edit_question.html template
     }
     
     @GetMapping("/analytics")
@@ -129,7 +156,7 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("message", "Question added successfully!");
 
         // Redirect to the createquestions page
-        return "redirect:/admin/createquestions";
+        return "redirect:/api/createquestions";
     }
 
 

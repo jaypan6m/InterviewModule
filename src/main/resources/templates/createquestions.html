@@ -9,86 +9,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Custom CSS -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            padding-top: 50px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-check {
-            margin-top: 10px;
-        }
-
-        .btn-primary {
-            margin-top: 20px;
-        }
-
-        .navbar {
-            background-color: #343a40 !important;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 0.5rem 1rem;
-        }
-
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .navbar-brand:hover {
-            color: #17a2b8;
-        }
-
-        .navbar-nav .nav-link {
-            color: #ffffff !important;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .navbar-nav .nav-link:hover {
-            color: #17a2b8 !important;
-        }
-
-        .nav-item.active .nav-link {
-            background-color: #17a2b8 !important;
-            border-radius: 20px;
-        }
-
-        .nav-item.active .nav-link:hover {
-            background-color: #138496 !important;
-        }
-
-        .nav-item:last-child .nav-link {
-            border-radius: 20px;
-            padding: 8px 20px;
-        }
-
-        .nav-item:last-child .nav-link:hover {
-            background-color: #dc3545 !important;
-            border-color: #dc3545 !important;
-        }
-
-        .container {
-            margin-top: 50px;
-        }
-
         .table th,
         .table td {
             vertical-align: middle;
@@ -98,40 +18,20 @@
             margin-right: 5px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <script>
+        $(document).ready(function () {
+            // Load navbar.html into the #navbarContainer div
+            $('#navbarContainer').load('/api/navigation');
+        });
+    </script>
 </head>
 
 <body>
-    <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">Admin Dashboard</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/users">Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/questions">Questions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/analytics">Analytics</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin/settings">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-danger" href="/admin/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <form method="post" action="/admin/addquestion">
+    
+     <div id="navbarContainer"></div>
+    
+    <form method="post" action="/api/addquestion">
         <!-- Add a hidden input field for the question ID -->
         <input type="hidden" id="questionId" name="id" value="123"> <!-- Replace "123" with the actual question ID if available -->
 
@@ -148,6 +48,10 @@
             <label for="language">Language:</label>
             <select class="form-control" id="language" name="language">
                 <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="Javascript">Javascript</option>
+                <option value="Java">Java</option>
+                <option value="Python">Python</option>
                 <!-- Add more options for other languages -->
             </select>
         </div>
@@ -167,14 +71,14 @@
     <div class="row">
         <div class="col-md-3">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="correctAnswersA" name="correctAnswers" value="A">
+        <input class="form-check-input" type="checkbox" id="correctAnswers" name="correctAnswers" value="A">
         <label class="form-check-label" for="optionA">A:</label>
         <input type="text" class="form-control" id="optionA" name="optionA">
     </div>
 	</div>
       <div class="col-md-3">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="correctAnswersB" name="correctAnswers" value="B">
+        <input class="form-check-input" type="checkbox" id="correctAnswers" name="correctAnswers" value="B">
         <label class="form-check-label" for="optionB">B:</label>
         <input type="text" class="form-control" id="optionB" name="optionB">
     </div>
@@ -182,19 +86,18 @@
 
      <div class="col-md-3">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="correctAnswersC" name="correctAnswers" value="C">
+        <input class="form-check-input" type="checkbox" id="correctAnswers" name="correctAnswers" value="C">
         <label class="form-check-label" for="optionC">C:</label>
         <input type="text" class="form-control" id="optionC" name="optionC">
     </div>
 </div>
 
         <div class="col-md-3">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="correctAnswers" name="correctAnswers" value="D">
-                <input class="form-check-input" type="radio" id="correctAnswers" name="correctAnswers" value="D">
-                <label class="form-check-label" for="optionD">D:</label>
-                <input type="text" class="form-control" id="optionD" name="optionD">
-            </div>
+             <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="correctAnswers" name="correctAnswers" value="D">
+        <label class="form-check-label" for="optionC">D:</label>
+        <input type="text" class="form-control" id="optionD" name="optionD">
+    </div>
         </div>
     </div>
 </div>
